@@ -9,6 +9,14 @@ use Rossato\Marvel\Model\Story;
 
 class Fetcher {
 	/**
+	 * A request counter to debug how many requests are sent by all instances of this class to the endpoint.
+	 * (Only counts current request).
+	 *
+	 * @var number
+	 */
+	private static $requestCount = 0;
+
+	/**
 	 * The default gateway used to request data
 	 * @var string
 	 */
@@ -101,6 +109,15 @@ class Fetcher {
 	}
 
 	/**
+	 * Retrieves how many requests instances of this class created in this request.
+	 *
+	 * @return integer
+	 */
+	public function getRequestCount() {
+		return self::$requestCount;
+	}
+
+	/**
 	 * Sends a request to an operation to the API endpoint.
 	 *
 	 * @param string $operation  The relative (from the endpoint point-of-view) url to the operation.
@@ -147,6 +164,7 @@ class Fetcher {
 		$params['apikey'] = $this->publicApiKey;
 		$params['hash'] = md5(time() . $this->privateApiKey . $this->publicApiKey);
 
+		self::$requestCount += 1;
 		$response = $client->request("GET", $url, ["query" => $params]);
 
 		$json = json_decode((string) $response->getBody(), true);
