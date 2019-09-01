@@ -58,7 +58,7 @@ class MarvelFetcherTest extends TestCase {
 		$fetcher->setClient(new MockedClient);
 
 		$storyId = getenv("MARVEL_STORY_ID");
-		$story = $fetcher->getStory($storyId);
+		$story = $fetcher->getStory(intval($storyId));
 
 		$this->assertInstanceOf(Story::class, $story);
 		$this->assertEquals($story->name, "Mocked Story");
