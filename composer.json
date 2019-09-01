@@ -18,6 +18,11 @@
         "lint": "phpcs --standard=./coding-standard-ruleset.xml ./src",
         "lint-fix": "phpcbf --standard=./coding-standard-ruleset.xml ./src"
     },
+    "autoload": {
+        "psr-4": {
+            "Rossato\\": "src"
+        }
+    },
     "license": "MIT",
     "authors": [
         {
