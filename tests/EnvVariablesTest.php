@@ -5,6 +5,10 @@ use PHPUnit\Framework\TestCase;
 use Dotenv\Dotenv;
 use Dotenv\Validator;
 
+/**
+ * This test will be ignored on development enviroment.
+ * If you wish to run it set the IS_PRODUCTION or RUN_PRODUCTION_TESTS environment variable.
+ */
 class EnvVariablesTest extends TestCase {
     /**
      * A dotenv instance.
@@ -13,6 +17,14 @@ class EnvVariablesTest extends TestCase {
      */
     protected static $dotenv;
 
+    /**
+     * Skip this test if we're not running in production or forcing all tests to be run.
+     */
+    protected function setUp(): void {
+        if (!getenv("IS_PRODUCTION") && !getenv("RUN_PRODUCTION_TESTS")) {
+            $this->markTestSkipped("Enviroment is not required in development / local mode.");
+        }
+    }
     /**
      * Initializes the tests with a dotenv instance to merge .env file and environment variables together
      */
