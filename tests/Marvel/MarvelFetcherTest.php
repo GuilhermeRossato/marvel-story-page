@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Marvel;
 
 use PHPUnit\Framework\TestCase;
 
@@ -51,13 +51,13 @@ class MarvelFetcherTest extends TestCase {
 	}
 
 	public function testWontAllowMissingParameters() {
-		$this->expectException(ArgumentCountError::class);
+		$this->expectException(\ArgumentCountError::class);
 
 		new Fetcher();
 	}
 
 	public function testWontAllowIncorrectParameters() {
-		$this->expectException(TypeError::class);
+		$this->expectException(\TypeError::class);
 
 		new Fetcher(1, 2);
 	}
@@ -81,6 +81,6 @@ class MarvelFetcherTest extends TestCase {
 		$character = $fetcher->getCharacter(intval($characterId));
 
 		$this->assertInstanceOf(Character::class, $character);
-		$this->assertEquals($character->name, "Mocked Result");
+		$this->assertEquals($character->title, "Mocked Result");
 	}
 }
