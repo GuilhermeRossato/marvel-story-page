@@ -1,0 +1,19 @@
+{
+    "name": "rossato/marvel-comics",
+    "description": "A marvel story web-page generator",
+    "type": "project",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "scripts": {
+        "test": "php index.php",
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Guilherme Rossato",
+            "email": "guilherme.rossato@acad.pucrs.br"
+        }
+    ],
+    "minimum-stability": "stable"
+}
