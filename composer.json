@@ -15,8 +15,8 @@
         "build": "php build.php",
         "test": "phpunit --bootstrap ./vendor/autoload.php tests",
         "test-coverage": "phpunit --bootstrap ./vendor/autoload.php --coverage-text tests",
-        "lint": "phpcs --standard=./coding-standard-ruleset.xml ./src",
-        "lint-fix": "phpcbf --standard=./coding-standard-ruleset.xml ./src"
+        "lint": "phpcs --standard=./coding-standard-ruleset.xml ./src ./tests",
+        "lint-fix": "phpcbf --standard=./coding-standard-ruleset.xml ./src ./tests"
     },
     "autoload": {
         "psr-4": {

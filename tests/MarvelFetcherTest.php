@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
 
+namespace Tests;
+
 use PHPUnit\Framework\TestCase;
 
 use Rossato\Marvel\Fetcher;
 use Rossato\Marvel\Model\Story;
+
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 
 /**
  * A Client mocked with a partial (but relevant) PSR7 interface.
