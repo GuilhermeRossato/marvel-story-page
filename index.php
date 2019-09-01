@@ -18,10 +18,10 @@ $timestamp = time();
 $hash = md5($timestamp . $privateKey . $publicKey);
 
 $params = [
-    'ts' => $timestamp,
-    'apikey' => $publicKey,
-    'hash' => $hash,
-    'limit' => 3
+	'ts' => $timestamp,
+	'apikey' => $publicKey,
+	'hash' => $hash,
+	'limit' => 3
 ];
 
 $url = $endpoint . "stories";
