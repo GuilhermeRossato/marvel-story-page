@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 use Rossato\Marvel\Fetcher;
 use Rossato\Marvel\Model\Story;
+use Rossato\Marvel\Model\Character;
 
 // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 
@@ -23,14 +24,18 @@ class MockedClient {
  * A Response class with a partial (but relevant) PSR7 interface.
  */
 class MockedResponse {
+	public function __construct($method, $url, $parameters) {
+		$this->url = $url;
+	}
+
 	public function getBody() {
 		return json_encode([
 			"data" => [
 				"results" => [
 					[
 						"id" => 1,
-						"title" => "Mocked Story",
-						"resourceURI" => "http://gateway.marvel.com/v1/public/stories/1"
+						"title" => "Mocked Result",
+						"resourceURI" => $this->url
 					]
 				]
 			]
@@ -61,10 +66,21 @@ class MarvelFetcherTest extends TestCase {
 		$fetcher = new Fetcher("publickey", "privatekey");
 		$fetcher->setClient(new MockedClient);
 
-		$storyId = getenv("MARVEL_STORY_ID");
+		$storyId = 1;
 		$story = $fetcher->getStory(intval($storyId));
 
 		$this->assertInstanceOf(Story::class, $story);
-		$this->assertEquals($story->name, "Mocked Story");
+		$this->assertEquals($story->name, "Mocked Result");
+	}
+
+	public function testFetchesACharacter() {
+		$fetcher = new Fetcher("publickey", "privatekey");
+		$fetcher->setClient(new MockedClient);
+
+		$characterId = 2;
+		$character = $fetcher->getCharacter(intval($characterId));
+
+		$this->assertInstanceOf(Character::class, $character);
+		$this->assertEquals($character->name, "Mocked Result");
 	}
 }
