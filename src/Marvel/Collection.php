@@ -5,8 +5,10 @@ namespace Rossato\Marvel;
 
 use Guzzle\Http\Message\Response;
 use Guzzle\Exception\RequestException;
+use Rossato\Marvel\Model\Story;
+use Rossato\Marvel\Model\Character;
 
-class Collection implements \Countable {
+class Collection implements \ArrayAccess, \Countable {
 	/**
 	 * The fetcher used to fetch more data if it is necessary.
 	 * @var Fetcher
@@ -18,6 +20,12 @@ class Collection implements \Countable {
 	 * @var boolean
 	 */
 	public $loaded;
+
+	/**
+	 * The number of currently available resources in the collection
+	 * @var boolean
+	 */
+	private $available;
 
 	/**
 	 * Creates an abstract collection and validates the collection data.
@@ -33,25 +41,39 @@ class Collection implements \Countable {
 			throw new Exception("Collection data is missing basic properties");
 		}
 
-		$this->returned = $collectionData["returned"];
+		$this->available = $collectionData["returned"];
 		$this->total = $collectionData["available"];
 		$this->collectionURI = $collectionData["collectionURI"];
+		$this->loaded = $this->total === $this->available;
+
+		$this->applyItems($collectionData["items"]);
 	}
 
 	/**
-	 * Apply the collection data.
+	 * Apply the collection items.
 	 *
-	 * @param array $collectionData  The collection data in an associative array.
+	 * @param array $items  The items inside the collection.
 	 */
-	private function applyResourceData($collectionData) {
-		$this->loaded = true;
-		foreach ($collectionData as $key) {
-			if (Resource::isResource($collectionData[$key])) {
-				$this->{$key} = new Resource($collectionData[$key], $this->fetcher);
-				continue;
+	private function applyItems($items) {
+		$this->items = [];
+
+		foreach (array_filter($items) as $resourceData) {
+			if ($resourceData instanceof Resource) {
+				$resource = $resourceData;
+			} else {
+				$resource = new Resource($resourceData, $this->fetcher, false);
 			}
 
-			$this->{$key} = $collectionData[$key];
+			$type = $resource->getResourceType();
+
+			if ($type === "stories") {
+				$item = Story::createFromResource($resource, $this->fetcher, false);
+			} elseif ($type === "characters") {
+				$item = Character::createFromResource($resource, $this->fetcher, false);
+			} else {
+				$item = $resource;
+			}
+			array_push($this->items, $item);
 		}
 	}
 
@@ -67,12 +89,74 @@ class Collection implements \Countable {
 	}
 
 	/**
+	 * Alias for offsetGet.
+	 * @param  integer $id  The offset index of the resource to be retrieved.
+	 * @return mixed        An Resource object (or an extending class if one is found)
+	 */
+	public function __get($id) {
+		return $this->offsetGet($id);
+	}
+
+	/**
 	 * Returns how many resources are inside this collection.
 	 *
 	 * @return integer
 	 */
 	public function count() {
 		return $this->total;
+	}
+
+
+	/**
+	 * Required as per ArrayObject implementation, but throws an error and shouldn't be executed.
+	 *
+	 * @throws \Exception
+	 */
+	public function offsetSet($offset, $value) {
+		throw new Exception("The collection class does not allow values to be set manually");
+	}
+
+	/**
+	 * Required as per ArrayObject implementation, but throws an error and shouldn't be executed.
+	 *
+	 * @throws \Exception
+	 */
+	public function offsetUnset($offset) {
+		throw new Exception("The collection class does not allow values to be set manually");
+	}
+
+	/**
+	 * Checks whenever an offset value exists, called usually by an 'isset' call or 'array_key_exists'.
+	 *
+	 * @param  integer $offset The index of the offset
+	 * @return boolean         Whether it exists or not.
+	 */
+	public function offsetExists($offset) {
+		if (is_string($offset) || !is_numeric($offset) || !is_integer($offset)) {
+			return false;
+		}
+		if ($offset < 0 || $offset >= $this->total) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Retrieves an index value, fetching it from the endpoint if it does not exist yet.
+	 *
+	 * @param  integer $offset  The offset index of the resource to be retrieved.
+	 * @return mixed            An Resource object (or an extending class if one is found)
+	 */
+	public function offsetGet($offset) {
+		if (!$this->offsetExists($offset)) {
+			return null;
+		}
+		if ($this->fetcher && !$this->loaded && $offset >= $this->available && $offset < $this->total) {
+			$this->loaded = true;
+			$this->applyItems($this->fetcher->retrieveAllResources($this->collectionURI));
+		}
+
+		return isset($this->items[$offset]) ? $this->items[$offset] : null;
 	}
 
 	/**
