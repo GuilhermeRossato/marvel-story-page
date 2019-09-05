@@ -94,6 +94,26 @@ class Fetcher {
 	}
 
 	/**
+	 * Retrieves all stories (unpaginated) from the endpoint.
+	 *
+	 * @param  integer $id  The identifier of the resource to retrieve.
+	 * @return Story        The Story resource.
+	 */
+	public function getStories() {
+		return $this->getResources("stories", Story::class);
+	}
+
+	/**
+	 * Retrieves all characters (unpaginated) from the endpoint.
+	 *
+	 * @param  integer $id  The identifier of the resource to retrieve.
+	 * @return mixed        The Character resource.
+	 */
+	public function getCharacters() {
+		return $this->getResources("characters", Character::class);
+	}
+
+	/**
 	 * Retrieves a single resource from the endpoint.
 	 *
 	 * @param  string $resourceType  The resource type in its plural form (e.g. 'stories').
@@ -126,6 +146,27 @@ class Fetcher {
 	}
 
 	/**
+	 * Retrieves all resources from the endpoint in an array of wrapped objects.
+	 *
+	 * @param  string $resourceType  The resource type in its plural form (e.g. 'stories').
+	 * @param  class $wrappingClass  (optional) The resource-extending model class to wrap the result with.
+	 *
+	 * @return array                 The array with Resource objects (or another extended class).
+	 */
+	private function getResources(string $resourceType, $wrappingClass = Resource::class) {
+		$url = $this->combineUrl("/".$resourceType);
+
+		$result = $this->retrieveAllResources($url);
+
+		return array_map(function ($resourceObject) use ($wrappingClass) {
+			if ($wrappingClass === Resource::class) {
+				return $resourceObject;
+			}
+			return $wrappingClass::createFromResource($resourceObject, $this, true);
+		}, array_filter($result));
+	}
+
+	/**
 	 * Check if a given url is safe to send the API credentials.
 	 * A safe url host must match the base endpoint url.
 	 *
@@ -137,7 +178,11 @@ class Fetcher {
 		$parts = parse_url($url);
 
 		if ($parts["scheme"] !== "https") {
-			return false;
+			// Notice: The following was disabled since we are dealing with public data.
+			// Also our API keys are also not crucial or sensitive, so we don't need to worry about safety here.
+			// But HTTPS should be enforced in any other situation.
+
+			//return false;
 		}
 
 		$safeParts = parse_url($this->baseUrl);
@@ -226,6 +271,52 @@ class Fetcher {
 		$json = json_decode((string) $response->getBody(), true);
 
 		return $json;
+	}
+
+	/**
+	 * Unpaginates a endpoint requests and retrieves an array of all Resource objects in the specified operation.
+	 *
+	 * @param  string $url    The absolute url (full) to the desired operation.
+	 * @param  array  $params (optional) The parameters in an associative array.
+	 *
+	 * @return array          The array of Resource objects.
+	 */
+	public function retrieveAllResources(string $url, array $params = []): array {
+		$params["offset"] = 0;
+
+		if (!array_key_exists("limit", $params)) {
+			$params["limit"] = isset($this->limit) ? $this->limit : 100;
+		}
+
+		if (!is_integer($params["limit"]) || $params["limit"] <= 0) {
+			throw new Exception("Invalid offset");
+		}
+
+		$resourceList = [];
+
+		$safetyGuardCount = 50;
+		do {
+			// A safety guard to avoid the while loop to run forever due to programming mistakes.
+			$safetyGuardCount -= 1;
+			if ($safetyGuardCount <= 0) {
+				throw new Exception("Loop overflow: For safety reasons this operation has been halted.");
+			}
+
+			$response = $this->requestURL($url, $params);
+
+			$pageResourceList = array_map(
+				function ($resourceData) {
+					return new Resource($resourceData, $this, true);
+				},
+				$response["data"]["results"]
+			);
+
+			$resourceList = array_merge($resourceList, $pageResourceList);
+
+			$params["offset"] += $response["data"]["limit"];
+		} while ($params["offset"] < $response["data"]["total"]);
+
+		return $resourceList;
 	}
 
 	/**
