@@ -34,8 +34,12 @@ class Resource {
 
 		// Validates the minimal parameters that all resources must have.
 		if (!$this->isResource($resourceData)) {
-			if (!array_key_exists("resourceURI", $resourceData)) {
+			if (!is_array($resourceData)) {
+				throw new \Exception("Resource data should be an array");
+			} elseif (!array_key_exists("resourceURI", $resourceData)) {
 				throw new \Exception("Resource data is missing resourceURI");
+			} elseif (!array_key_exists("name", $resourceData) && !array_key_exists("title", $resourceData)) {
+				throw new \Exception("Resource data is missing its 'name' key or 'title' key");
 			} else {
 				throw new \Exception("Resource data is missing basic properties");
 			}
@@ -54,7 +58,7 @@ class Resource {
 				continue;
 			}
 
-			$this->{$key} = $resourceData[$key];
+			$this->{$key} = $value;
 		}
 	}
 
@@ -64,7 +68,11 @@ class Resource {
 	 * @return string  The type of the resource in its plural form (like 'stories', 'characters' or 'comics')
 	 */
 	public function getResourceType() {
-		$parts = explode("/", $this->requestURI);
+		if (!is_string($this->resourceURI)) {
+			throw new \Exception("The request URI is not a valid string.");
+		}
+
+		$parts = explode("/", $this->resourceURI);
 		$id = array_pop($parts);
 		$type = array_pop($parts);
 		return $type;
