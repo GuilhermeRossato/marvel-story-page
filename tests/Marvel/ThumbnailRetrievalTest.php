@@ -50,7 +50,7 @@ class ThumbnailRetrievalTest extends TestCase {
 
 		$thumbnailUrl = $resource->getThumbnailUrl("standard_small");
 
-		$this->assertEquals("", $thumbnailUrl);
+		$this->assertEquals("http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/standard_small.jpg", $thumbnailUrl);
 	}
 
 	public function testThumbnailTypeInvalid() {

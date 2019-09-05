@@ -181,9 +181,12 @@ class Resource {
 	];
 
 	/**
-	 * Retrieves the URL of the thumbnail of the resource or an empty string if it does not exist.
+	 * Retrieves the URL of the thumbnail of the resource.
+	 * Some of the images from the endpoint comes as a url to a "image_not_available" url.
+	 * So if a thumbnail is not found, empty or invalid, the image_not_found image is returned.
+	 *
 	 * @param  string $type (optional) The type of the thumbnail image, one of the values in THUMBNAIL_TYPES.
-	 * @return string       The full url to the image or an empty string if none is found.
+	 * @return string       The full url to the image.
 	 */
 	public function getThumbnailUrl($type = "detail") {
 		if (!is_string($type) || !in_array($type, self::THUMBNAIL_TYPES)) {
@@ -191,7 +194,7 @@ class Resource {
 		}
 		$thumbnailObject = $this->thumbnail;
 		if (!$thumbnailObject || !array_key_exists("url", $thumbnailObject)) {
-			return "";
+			return "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/".$type.".jpg";
 		}
 		return rtrim($thumbnailObject["url"], "/")."/".$type.".".ltrim($thumbnailObject["extension"], ".");
 	}
