@@ -154,6 +154,49 @@ class Resource {
 	}
 
 	/**
+	 * Thumbnail types as seen from
+	 */
+	const THUMBNAIL_TYPES = [
+		"portrait_small", //50x75px
+		"portrait_medium", //100x150px
+		"portrait_xlarge", //150x225px
+		"portrait_fantastic", //168x252px
+		"portrait_uncanny", //300x450px
+		"portrait_incredible", //216x324px
+
+		"standard_small", //65x45px
+		"standard_medium", //100x100px
+		"standard_large", //140x140px
+		"standard_xlarge", //200x200px
+		"standard_fantastic", //250x250px
+		"standard_amazing", //180x180px
+
+		"landscape_small", //120x90px
+		"landscape_medium", //175x130px
+		"landscape_large", //190x140px
+		"landscape_xlarge", //270x200px
+		"landscape_amazing", //250x156px
+		"landscape_incredible", //464x261px
+		"detail", //MAXx500px
+	];
+
+	/**
+	 * Retrieves the URL of the thumbnail of the resource or an empty string if it does not exist.
+	 * @param  string $type (optional) The type of the thumbnail image, one of the values in THUMBNAIL_TYPES.
+	 * @return string       The full url to the image or an empty string if none is found.
+	 */
+	public function getThumbnailUrl($type = "detail") {
+		if (!is_string($type) || !in_array($type, self::THUMBNAIL_TYPES)) {
+			throw new \InvalidArgumentException("Invalid type \"".$type."\"");
+		}
+		$thumbnailObject = $this->thumbnail;
+		if (!$thumbnailObject || !array_key_exists("url", $thumbnailObject)) {
+			return "";
+		}
+		return rtrim($thumbnailObject["url"], "/")."/".$type.".".ltrim($thumbnailObject["extension"], ".");
+	}
+
+	/**
 	 * Generates an instanceof of self from another Resource class (or extended class).
 	 * Copies properties similar to a Class clone.
 	 *
