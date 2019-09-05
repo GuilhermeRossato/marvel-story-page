@@ -23,7 +23,7 @@ class Fetcher {
 	 * The default gateway used to request data
 	 * @var string
 	 */
-	private $baseUrl = 'https://gateway.marvel.com/v1/public/';
+	private $baseUrl = "https://gateway.marvel.com/v1/public/";
 
 	/**
 	 * The public API key provided by marvel.
@@ -62,7 +62,7 @@ class Fetcher {
 	 * Retrieves a character object from the endpoint.
 	 *
 	 * @param  integer $id  The identifier of the resource to retrieve.
-	 * @return Story        The Story resource.
+	 * @return Character    The Character resource.
 	 */
 	public function getCharacter($id) {
 		return $this->getResource("characters", $id, Character::class);
@@ -82,7 +82,7 @@ class Fetcher {
 	 * Retrieves a creator object from the endpoint.
 	 *
 	 * @param  integer $id  The identifier of the resource to retrieve.
-	 * @return Creator        The Creator resource.
+	 * @return Creator      The Creator resource.
 	 */
 	public function getCreator($id) {
 		return $this->getResource("creators", $id, Creator::class);
@@ -93,7 +93,7 @@ class Fetcher {
 	 *
 	 * @param  string $resourceType  The resource type in its plural form (e.g. 'stories').
 	 * @param  integer $resourceId   The identifier of the resource to retrieve.
-	 * @param  class $wrappingClass  The resource-extending model class to wrap the result with.
+	 * @param  class $wrappingClass  (optional) The resource-extending model class to wrap the result with.
 	 *
 	 * @return mixed                 A Resource object or an extending model class as provided
 	 */
@@ -120,7 +120,7 @@ class Fetcher {
 
 	/**
 	 * Check if a given url is safe to send the API credentials.
-	 * A safe url should be sent by 'https' (SSL) protocol and its host must match the base endpoint url.
+	 * A safe url host must match the base endpoint url.
 	 *
 	 * @param  string  $url  The full url that the request will be sent to.
 	 *
@@ -184,18 +184,18 @@ class Fetcher {
 	 */
 	public function requestURL(string $url, array $params = []) {
 		if (!$this->isSafeUrl($url)) {
-			throw new \Exception("Security Error: The URL in the request is not allowed or is deemed unsafe.");
+			throw new \Exception("Security Error: The URL in the request is not allowed or is deemed unsafe: ".$url);
 		}
 
 
 		$client = isset($this->client) ? $this->client : new Client();
 
 		if (!array_key_exists("limit", $params) && !array_key_exists("offset", $params)) {
-			$params['limit'] = 1;
+			$params["limit"] = 1;
 		}
-		$params['ts'] = time();
-		$params['apikey'] = $this->publicApiKey;
-		$params['hash'] = md5(time() . $this->privateApiKey . $this->publicApiKey);
+		$params["ts"] = time();
+		$params["apikey"] = $this->publicApiKey;
+		$params["hash"] = md5(time() . $this->privateApiKey . $this->publicApiKey);
 
 		self::$requestCount += 1;
 		$response = $client->request("GET", $url, ["query" => $params]);

@@ -10,7 +10,7 @@ use Dotenv\Validator;
 
 /**
  * This test will be ignored on development enviroment.
- * If you wish to run it set the IS_PRODUCTION or RUN_PRODUCTION_TESTS environment variable.
+ * If you wish to run it set either the IS_PRODUCTION or RUN_PRODUCTION_TESTS environment variable to "1".
  */
 class EnvVariablesTest extends TestCase {
 	/**
@@ -25,9 +25,10 @@ class EnvVariablesTest extends TestCase {
 	 */
 	protected function setUp(): void {
 		if (!getenv("IS_PRODUCTION") && !getenv("RUN_PRODUCTION_TESTS")) {
-			$this->markTestSkipped("Enviroment is not required in development / local mode.");
+			$this->markTestSkipped("Enviroment test is not required in development / local mode.");
 		}
 	}
+
 	/**
 	 * Initializes the tests with a dotenv instance to merge .env file and environment variables together
 	 */
@@ -39,10 +40,10 @@ class EnvVariablesTest extends TestCase {
 
 	public function testDefinedMarvelKeys() {
 		$validation = self::$dotenv->required([
-			'MARVEL_PUBLIC_KEY',
-			'MARVEL_PRIVATE_KEY',
-			'MARVEL_CHARACTER_ID',
-			'MARVEL_STORY_ID'
+			"MARVEL_PUBLIC_KEY",
+			"MARVEL_PRIVATE_KEY",
+			"MARVEL_CHARACTER_ID",
+			"MARVEL_STORY_ID"
 		])->notEmpty();
 
 		$this->assertInstanceOf(Validator::class, $validation);

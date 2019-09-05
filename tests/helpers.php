@@ -8,9 +8,9 @@
  * @return boolean           Whether $haystack ends with the substring in $needle.
  */
 function endsWith($haystack, $needle) {
-    $length = strlen($needle);
+	$length = strlen($needle);
 
-    return (substr($haystack, -$length, $length) === $needle);
+	return (substr($haystack, -$length, $length) === $needle);
 }
 
 /**
@@ -20,7 +20,7 @@ function endsWith($haystack, $needle) {
  * @return boolean           Whether $haystack starts with the substring in $needle.
  */
 function startsWith($haystack, $needle) {
-     $length = strlen($needle);
+	 $length = strlen($needle);
 
-     return (substr($haystack, 0, $length) === $needle);
+	 return (substr($haystack, 0, $length) === $needle);
 }
