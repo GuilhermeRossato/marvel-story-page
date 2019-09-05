@@ -38,6 +38,11 @@ class Fetcher {
 	private $privateApiKey;
 
 	/**
+	 * The default pagination limit to use when not specified.
+	 */
+	private $limit = 100;
+
+	/**
 	 * Creates the class with the public and the private API keys necessary for requests to succeed.
 	 *
 	 * @param string $publicApiKey  The public API key provided at marvel's website.
@@ -98,7 +103,9 @@ class Fetcher {
 	 * @return mixed                 A Resource object or an extending model class as provided
 	 */
 	private function getResource(string $resourceType, int $resourceId, $wrappingClass = Resource::class) {
-		$response = $this->requestOperation("/".$resourceType, ["limit" => 1]);
+		$url = $this->combineUrl("/".$resourceType."/".$resourceId);
+
+		$response = $this->requestURL($url, ["limit" => 1]);
 
 		if (!is_array($response) ||
 			!array_key_exists("data", $response) ||
@@ -142,26 +149,42 @@ class Fetcher {
 	}
 
 	/**
+	 * Sets the default pagination limit to use when not specified by parameters.
+	 *
+	 * @param integer $limit  The desired default pagination limit.
+	 */
+	public function setDefaultLimit(int $limit) {
+		$this->limit = $limit;
+	}
+
+	/**
+	 * Resets the request count of all instances of this class.
+	 */
+	public static function resetRequestCount() {
+		self::$requestCount = 0;
+	}
+
+	/**
 	 * Retrieves how many requests instances of this class created in this request.
 	 *
 	 * @return integer
 	 */
-	public function getRequestCount() {
+	public static function getRequestCount() {
 		return self::$requestCount;
 	}
 
 	/**
-	 * Sends a request to an operation to the API endpoint.
+	 * Combines an operation string with the baseUrl to create a full url to an API endpoint.
 	 *
 	 * @param string $operation  The relative (from the endpoint point-of-view) url to the operation.
 	 * @param array $params      (optional) The associative array with the parameters to be sent.
 	 *
 	 * @return object  The raw json-decoded object from the response.
 	 */
-	public function requestOperation(string $operation, $params = []) {
+	public function combineUrl(string $operation) {
 		$url = rtrim($this->baseUrl, "/") . "/" . ltrim($operation, "/");
 
-		return $this->requestURL($url, $params);
+		return $url;
 	}
 
 	/**
@@ -212,7 +235,10 @@ class Fetcher {
 	 * @return string         The attribution text in a string or an empty string if it could not be retrieved.
 	 */
 	public function getAttributionText($html = false) {
-		$response = $this->requestOperation("/stories", ["limit" => 1]);
+		$url = $this->combineUrl("/stories");
+
+		$response = $this->requestURL($url, ["limit" => 1]);
+
 		return array_key_exists("attributionText", $response) ? $reponse["attributionText"] : "";
 	}
 }
