@@ -55,9 +55,7 @@ The Fetcher class can also load unpaginated results
 
 ## How to use the classes in this project
 
-This repository will have docs folder available, as of now the basics are below:
-
-This app is about page creation, so the main folder does just that:
+This app is about page creation, so the main Class does just that:
 
 ```php
 require_once __DIR__."/vendor/autoload.php";
@@ -110,4 +108,13 @@ echo "There are ".count($characters)." characters in the marvel api\n";
 
 ```
 
+All class methods and their parameters are documented in the code, so a quick look through the source code will let you see what it does and how to use it.
+
+## Credits
+
+Website and page creation done by Guilherme Rossato
+
+Images, characters, stories created by Marvel
+
+Data provided by Marvel. © [MARVEL](http://marvel.com)
 
