@@ -1,101 +1,177 @@
 body, html {
-    width: 100vw;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto Slab', sans-serif;
+	width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto Slab', sans-serif;
 }
 
 h1,h2,h3,h4 {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 img {
-    display: block;
+	display: block;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 
 .centered {
-    text-align: center;
+	text-align: center;
 }
 
 .full-page-width {
-    width: 100vw;
-    max-height: 60vh;
-    object-fit: cover;
+	width: 100vw;
+	max-height: 60vh;
+	object-fit: cover;
 }
 
 .container {
-    width: 50%;
-    max-width: 960px;
-    margin: 0 auto;
+	width: 60%;
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 .main-title-wrapper {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
+	position: relative;
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-start;
 }
 
 .main-title {
-    padding: 5px 30px;
-    text-align: left;
-    background-color: white;
-    font-weight: 300;
+	padding: 5px 30px;
+	text-align: left;
+	background-color: white;
+	font-weight: 300;
 }
 
 .main-content {
-    margin-top: -50px;
+	margin-top: -50px;
 }
 
 .story-count, .comic-count {
-    margin-left: 50px;
-    background-color: white;
-    padding: 5px 16px;
-    font-size: 1.25em;
-    font-weight: 300;
+	margin-left: 50px;
+	background-color: white;
+	padding: 5px 16px;
+	font-size: 1.25em;
+	font-weight: 300;
 }
 
 .main-content .comic {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto 1fr auto;
-    grid-gap: 10px;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 1fr auto;
+	grid-gap: 10px;
 }
 
 .comic .comic-title {
-    /* grid-column: 1/2; */
-    /* grid-row: 2/3; */
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 2;
-    grid-row-end: 3;
+	/* grid-column: 1/2; */
+	/* grid-row: 2/3; */
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 2;
+	grid-row-end: 3;
 }
 
 .comic .comic-description {
-    /* grid-column: 1/2; */
-    /* grid-row: 3/3; */
-    grid-column-start: 1;
-    grid-column-end: 1;
-    grid-row-start: 3;
-    grid-row-end: 4;
+	grid-column-start: 1;
+	grid-column-end: 1;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	font-size: 1.1em;
+	line-height: 1.8em;
 }
 
 .comic .comic-image {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 4;
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
 }
 
 .comic .section-title {grid-column-start: 1;grid-column-end: 3;grid-row-start: 1;grid-row-end: 2;}
 
 .comic .section-title h3 {
-    font-size: 36px;
+	font-size: 36px;
 }
 
 .comic .section-title h3 small {
-    font-size: 0.3em;
-    margin-left: 10px;
+	font-size: 0.3em;
+	margin-left: 10px;
+}
+
+.character-item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	order: 1;
+	transform: scale(0.9);
+	transition: transform 0.2s ease-in-out;
+}
+
+.moving-carrousel {
+	display: flex;
+	position: relative;
+	left: 0;
+	width: 100%;
+}
+
+.character-item.favorite-character {
+	order: 0;
+	transform: scale(1);
+}
+
+.moving-carrousel-wrapper:before, .moving-carrousel-wrapper:after {
+	display: block;
+	width: 100px;
+	min-width: 100px;
+	position: relative;
+	content: '';
+	background-image: linear-gradient(90deg, white, transparent);
+	flex-basis: 10px;
+	z-index: 10;
+	margin-left: -100px;
+}
+.moving-carrousel-wrapper:after {
+	margin-left: 0;
+	margin-right: -100px;
+	background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.01), white);
+}
+
+.moving-carrousel-wrapper {
+	display: flex;
+}
+
+.characters {
+	padding-left: 100px;
+	margin-left: -100px;
+	padding-right: 100px;
+	margin-right: -100px;
+	overflow: hidden;
+}
+
+.character-item:hover {
+	transform: scale(0.95);
+}
+
+.character-item.favorite-character:hover {
+	transform: scale(1.02);
+}
+
+footer {
+    margin-top: 100px;
+    padding: 20px 0 30px 0;
+    line-height: 30px;
+    background-color: #333;
+    color: #ccc;
+}
+
+footer a {
+    color: #999999;
 }
