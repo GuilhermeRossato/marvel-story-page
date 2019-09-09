@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="robots" content="noindex,nofollow" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{{ pageTitle }}</title>
+	<!-- CSS Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400&display=swap" rel="stylesheet" />
+	<!-- Personal styling -->
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<!-- Generated page metadata -->
+	<meta name="CHARACTER-ID" content="{{ character.id }}" />
+	<meta name="COMIC-ID" content="{{ comic.id }}" />
+{% for link in character.urls %}
+	<meta name="CHARACTER-LINK-{{ link.type | upper }}" content="{{ link.url }}" />
+{% endfor %}
+</head>
+<body>
+	<header>
+		<div class="main-image-wrapper">
+			<img class="full-page-width" src="marvel-rocket-banner.jpg" data-mobile-src="marvel-rocket-banner-mobile.jpg" data-desktop-src="marvel-rocket-banner-desktop.jpg" />
+		</div>
+	</header>
+	<main class="container main-content">
+		<div class="main-title-wrapper">
+			<h1 class="main-title">{{ comic.title }}</h1>
+		</div>
+		<section class="comic">
+			<div class="section-title"><h3>Story <small>#{{ comic.id }}</small></h3></div>
+			<div class="comic-title"><h4>{{ comic.title }}</h4></div>
+			<div class="comic-description">{{ comic.description }}</div>
+			<div class="comic-image"><img src="{{ comic.thumbnail }}" alt="comic image"/></div>
+			<div class="comic-characters">
+				<div class="moving-list">
+				</div>
+			</div>
+		</section>
+		<section class="characters">
+			<div class="section-title"><h3>Characters</h3></div>
+			<div class="moving-carrousel">
+{% for character in comic.characters %}
+				<div>
+					<div class="character-name">
+						<p>{{ character.name }}</p>
+					</div>
+					<div class="character-description">
+						<p>{{ character.description }}</p>
+					</div>
+					<div class="character-image">
+						<img src="{{ character.thumbnail }}" />
+					</div>
+				</div>
+{% endfor %}
+			</div>
+		</section>
+	</main>
+	<footer>
+		<div class="website-message centered">Website and page creation done by Guilherme Rossato</div>
+		<div class="marvel-message centered"><a href="http://marvel.com">{{ attributionText }}</a></div>
+	</footer>
+	<script>
+		const dynamicImages = [];
+
+		document.addEventListener("DOMContentLoaded", function() {
+			const images = document.querySelectorAll('img[src]');
+			for (const index in images) {
+				const image = images[index];
+				if (!(image instanceof HTMLImageElement)) {
+					continue;
+				}
+				if (!image.getAttribute("data-mobile-src") && !image.getAttribute("data-desktop-src")) {
+					continue;
+				}
+				dynamicImages.push(image);
+				updateImage(image);
+			}
+		});
+
+		function updateImage(image) {
+			const attributeName = (window.innerWidth < 600) ? "data-mobile-src" : "data-desktop-src";
+			const attributeValue = image.getAttribute(attributeName);
+			if (!attributeValue) {
+				return;
+			}
+			if (image.getAttribute("src" === attributeValue)) {
+				return;
+			}
+			image.setAttribute("src", attributeValue);
+		}
+
+		window.addEventListener("resize", function() {
+			dynamicImages.forEach(updateImage);
+		});
+
+	</script>
+</body>
