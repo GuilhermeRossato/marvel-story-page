@@ -253,7 +253,9 @@ class Fetcher {
 			throw new \Exception("Security Error: The URL in the request is not allowed or is deemed unsafe: ".$url);
 		}
 
-		//$cacheFile = "cache-".str_replace("--", "-", preg_replace("/[^A-Za-z0-9\-\_]/",'-',substr($url, 7)))."-".(array_key_exists("offset", $params)?$params["offset"]:"0")."-".(array_key_exists("limit", $params)?$params["limit"]:"1").".json";
+		//$cacheFile = "cache-".str_replace("--", "-", preg_replace("/[^A-Za-z0-9\-\_]/",'-',substr($url, 7)))."-".
+		//	(array_key_exists("offset", $params)?$params["offset"]:"0")."-".
+		//	(array_key_exists("limit", $params)?$params["limit"]:"1").".json";
 		//if (file_exists($cacheFile)) {
 		//	return json_decode((string) file_get_contents($cacheFile), true);
 		//}
