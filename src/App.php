@@ -184,6 +184,7 @@ class App {
 
 		$characterList = array_map(function($character) {
 			return [
+				"id" => $character->id,
 				"name" => $character->name,
 				"description" => $character->description,
 				"thumbnail" => $character->getThumbnailUrl("portrait_incredible")
@@ -197,7 +198,8 @@ class App {
 			"comic" => [
 				"id" => $comic->id,
 				"title" => $comic->title,
-				"thumbnail" => $comic->getThumbnailUrl("portrait_incredible"),
+				"mobileThumbnail" => $comic->getThumbnailUrl("portrait_medium"),
+				"desktopThumbnail" => $comic->getThumbnailUrl("portrait_incredible"),
 				"description" => $comic->description,
 				"characters" => $characterList,
 				"creators" => $comic->creators->asList()
