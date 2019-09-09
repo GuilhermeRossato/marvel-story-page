@@ -67,6 +67,7 @@ img {
 	grid-template-columns: auto 1fr;
 	grid-template-rows: 1fr auto;
 	grid-gap: 10px;
+	margin-top: 30px;
 }
 
 .comic .comic-title {
@@ -94,7 +95,12 @@ img {
 	grid-row-end: 2;
 }
 
-.comic .section-title {grid-column-start: 1;grid-column-end: 3;grid-row-start: 1;grid-row-end: 2;}
+.comic .section-title {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
 
 .comic .section-title h3 {
 	font-size: 36px;
@@ -138,6 +144,7 @@ img {
 	z-index: 10;
 	margin-left: -100px;
 }
+
 .moving-carrousel-wrapper:after {
 	margin-left: 0;
 	margin-right: -100px;
@@ -165,13 +172,13 @@ img {
 }
 
 footer {
-    margin-top: 100px;
-    padding: 20px 0 30px 0;
-    line-height: 30px;
-    background-color: #333;
-    color: #ccc;
+	margin-top: 100px;
+	padding: 20px 0 30px 0;
+	line-height: 30px;
+	background-color: #333;
+	color: #ccc;
 }
 
 footer a {
-    color: #999999;
+	color: #999999;
 }
