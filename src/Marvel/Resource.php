@@ -193,10 +193,23 @@ class Resource {
 			throw new \InvalidArgumentException("Invalid type \"".$type."\"");
 		}
 		$thumbnailObject = $this->thumbnail;
-		if (!$thumbnailObject || !array_key_exists("url", $thumbnailObject)) {
-			return "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/".$type.".jpg";
+
+		$path = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available";
+
+		if ($thumbnailObject && is_array($thumbnailObject) && array_key_exists("url", $thumbnailObject)) {
+			$path = $thumbnailObject["url"];
 		}
-		return rtrim($thumbnailObject["url"], "/")."/".$type.".".ltrim($thumbnailObject["extension"], ".");
+		if ($thumbnailObject && is_array($thumbnailObject) && array_key_exists("path", $thumbnailObject)) {
+			$path = $thumbnailObject["path"];
+		}
+
+		$extension = "jpg";
+
+		if ($thumbnailObject && is_array($thumbnailObject) && array_key_exists("extension", $thumbnailObject)) {
+			$extension = $thumbnailObject["extension"];
+		}
+
+		return rtrim($path, "/")."/".$type.".".ltrim($extension, ".");
 	}
 
 	/**
