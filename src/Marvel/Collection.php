@@ -188,7 +188,7 @@ class Collection implements \ArrayAccess, \Countable {
 	 */
 	public function asList() {
 		$result = [];
-		for($index = 0; $index < $this->total; $index ++) {
+		for ($index = 0; $index < $this->total; $index ++) {
 			if ($this[$index]) {
 				array_push($result, $this[$index]);
 			}
