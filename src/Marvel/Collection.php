@@ -180,4 +180,19 @@ class Collection implements \ArrayAccess, \Countable {
 		}
 		return true;
 	}
+
+	/**
+	 * Returns a primitive php array of all resources inside this collection.
+	 *
+	 * @return Array  List of Resource (or an extending class);
+	 */
+	public function asList() {
+		$result = [];
+		for($index = 0; $index < $this->total; $index ++) {
+			if ($this[$index]) {
+				array_push($result, $this[$index]);
+			}
+		}
+		return $result;
+	}
 }
