@@ -1,8 +1,6 @@
 # Marvel Comics Page Generator
 
-A web-page generator that uses the Marvel API to generate a page featuring a character and a story it is in, the other characters involved in the story alongside the list of comics the character was present in.
-
-This app creates a page for a marvel character and optionally a story.
+A web-page generator that uses the Marvel API to generate a page with a Marvel Comic defined with the characters involved in the story alongside the list of comics the character was present in.
 
 ## Setup
 
