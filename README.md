@@ -2,6 +2,11 @@
 
 A web-page generator that uses the Marvel API to generate a page with a Marvel Comic defined with the characters involved in the story alongside the list of comics the character was present in.
 
+## Preview
+
+![Page Preview](https://github.com/GuilhermeRossato/marvel-story-page/blob/master/preview.png?raw=true),
+
+
 ## Setup
 
 Clone the repository:
