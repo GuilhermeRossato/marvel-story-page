@@ -147,7 +147,10 @@ class App {
 					unlink($dir.$ds.$file);
 				}
 			}
-			rmdir($dir);
+			@rmdir($dir);
+			if (is_dir($dir)) {
+				throw new \Exception("Could not remove the directory \"".$dir."\"");
+			}
 		}
 	}
 
@@ -210,5 +213,7 @@ class App {
 
 		$this->copyAssets($assetPath, $buildPath);
 		$this->saveToFile($indexPath, $pageHtml);
+
+		echo "Build script finished\n";
 	}
 }
