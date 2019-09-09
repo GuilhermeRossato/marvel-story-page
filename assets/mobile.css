@@ -3,37 +3,52 @@
 		max-width: 100vw;
 		overflow-x: hidden;
 	}
+
 	.container {
 		width: 90%;
 	}
+
 	.main-content {
 		margin-top: 0px;
 	}
+
 	.main-title {
 		padding: 15px 0px;
 	}
+
 	.main-content .comic {
 		grid-template-columns: 1fr 100px;
 	}
+
 	.comic .comic-description {
 		font-size: 12px;
 		text-align: justify;
 	}
+
 	.moving-carrousel-wrapper:before, .moving-carrousel-wrapper:after {
 		display: none;
 	}
+
 	.moving-carrousel {
 		display: flex;
 		flex-wrap: wrap;
 	}
+
 	.moving-carrousel .character-item {
 		max-width: 49%;
 		transform: scale(0.95) !important;
 	}
+
 	.moving-carrousel .character-item:hover {
 		transform: scale(0.97) !important;
 	}
+
 	.character-image, .character-item img {
 		width: 100%
+	}
+
+	.comic-image {
+		display: flex;
+		align-items: center;
 	}
 }
