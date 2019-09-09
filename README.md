@@ -19,8 +19,8 @@ Remember to include the character id and (optionally) a comic id (retrieved from
 ```env
 MARVEL_PUBLIC_KEY=63f9XXXXXXXXXXXXXXXXXXX0144
 MARVEL_PRIVATE_KEY=c1d4XXXXXXXXXXXXXXXXXXXXXXXXX67bd
-MARVEL_CHARACTER_ID=1010744
 MARVEL_COMIC_ID=33072
+MARVEL_FAVORITE_CHARACTER_ID=1010744
 ```
 
 The above values are just an example and are available at the `.env-example` file.

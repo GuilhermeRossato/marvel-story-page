@@ -42,7 +42,7 @@ class EnvVariablesTest extends TestCase {
 		$validation = self::$dotenv->required([
 			"MARVEL_PUBLIC_KEY",
 			"MARVEL_PRIVATE_KEY",
-			"MARVEL_CHARACTER_ID"
+			"MARVEL_COMIC_ID"
 		])->notEmpty();
 
 		$this->assertInstanceOf(Validator::class, $validation);
