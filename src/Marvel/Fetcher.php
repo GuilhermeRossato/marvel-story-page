@@ -7,8 +7,6 @@ use GuzzleHttp\Client;
 use Rossato\Marvel\Resource;
 use Rossato\Marvel\Model\Story;
 use Rossato\Marvel\Model\Character;
-use Rossato\Marvel\Model\Comic;
-use Rossato\Marvel\Model\Creator;
 
 class Fetcher {
 	/**
@@ -23,7 +21,7 @@ class Fetcher {
 	 * The default gateway used to request data
 	 * @var string
 	 */
-	private $baseUrl = "https://gateway.marvel.com/v1/public/";
+	private $baseUrl = "http://gateway.marvel.com/v1/public/";
 
 	/**
 	 * The public API key provided by marvel.
@@ -77,20 +75,20 @@ class Fetcher {
 	 * Retrieves a comic object from the endpoint.
 	 *
 	 * @param  integer $id  The identifier of the resource to retrieve.
-	 * @return Comic        The Comic resource.
+	 * @return Resource        The Comic resource.
 	 */
 	public function getComic($id) {
-		return $this->getResource("comics", $id, Comic::class);
+		return $this->getResource("comics", $id, Resource::class);
 	}
 
 	/**
 	 * Retrieves a creator object from the endpoint.
 	 *
 	 * @param  integer $id  The identifier of the resource to retrieve.
-	 * @return Creator      The Creator resource.
+	 * @return Resource      The Creator resource.
 	 */
 	public function getCreator($id) {
-		return $this->getResource("creators", $id, Creator::class);
+		return $this->getResource("creators", $id, Resource::class);
 	}
 
 	/**
@@ -330,6 +328,8 @@ class Fetcher {
 
 		$response = $this->requestURL($url, ["limit" => 1]);
 
-		return array_key_exists("attributionText", $response) ? $reponse["attributionText"] : "";
+		$key = $html ? "attributionHTML" : "attributionText";
+
+		return array_key_exists($key, $response) ? $response[$key] : "";
 	}
 }
