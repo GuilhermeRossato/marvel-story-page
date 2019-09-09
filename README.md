@@ -1,11 +1,10 @@
 # Marvel Comics Page Generator
 
-A web-page generator that uses the Marvel API to generate a page with a Marvel Comic defined with the characters involved in the story alongside the list of comics the character was present in.
+A web-page generator that uses the Marvel API to generate a page with a Marvel Comic defined alongside the characters involved in that story.
 
 ## Preview
 
 ![Page Preview](https://github.com/GuilhermeRossato/marvel-story-page/blob/master/preview.png?raw=true),
-
 
 ## Setup
 
@@ -19,7 +18,7 @@ Retrieve your credentials (public key and private key) from your [Marvel Account
 
 If you create a `.env` file at the root of this project, you can add your keys to it effortlessly.
 
-Remember to include the character id and (optionally) a comic id (retrieved from the API) to it.
+Remember to include the comic id and (optionally) a favorite character id (retrieved from the API) to it.
 
 ```env
 MARVEL_PUBLIC_KEY=63f9XXXXXXXXXXXXXXXXXXX0144
@@ -40,7 +39,7 @@ You're all set, you should see a new `build` folder at the root of this applicat
 
 ## Testing
 
-Testing is orchestrated by PHPUnit and are defined at the `tests` folder and can be activated by the following composer script:
+Testing is orchestrated by PHPUnit and they are found at the `tests` folder and can be activated by the following composer script:
 
 ```bash
 composer run test
@@ -48,9 +47,9 @@ composer run test
 
 ## How does it work?
 
-The Marvel API Fetcher class retrieves resources from the marvel API, which can be read [from here](https://developer.marvel.com/docs).
+The Marvel API Fetcher class retrieves resources from the marvel API, the API is a relatively public endpoint to retrieve data and is defined [here](https://developer.marvel.com/docs).
 
-Marvel API works by returning a paginated resource list (limited by 100 results for requests), and each resource can have collections, which are lists of resources associated with the primary requested resource.
+Marvel API works by returning a paginated resource list (limited by 100 results for requests), and each resource can have collections, which are lists of resources associated with the main requested resource.
 
 Collections contain incomplete Resources, so the Resource object is lazy-loaded whenever a 'missing' property is requested, which triggers a request for that resource in the endpoint so that it loads the expected property.
 
