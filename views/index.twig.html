@@ -29,71 +29,38 @@
 			<h1 class="main-title">{{ comic.title }}</h1>
 		</div>
 		<section class="comic">
-			<div class="section-title"><h3>Story <small>#{{ comic.id }}</small></h3></div>
-			<div class="comic-title"><h4>{{ comic.title }}</h4></div>
 			<div class="comic-description">{{ comic.description }}</div>
-			<div class="comic-image"><img src="{{ comic.thumbnail }}" alt="comic image"/></div>
+			<div class="comic-image">
+				<img data-mobile-src="{{ comic.mobileThumbnail }}" data-desktop-src="{{ comic.desktopThumbnail }}" alt="Comig Image"/>
+			</div>
 			<div class="comic-characters">
 				<div class="moving-list">
 				</div>
 			</div>
 		</section>
 		<section class="characters">
-			<div class="section-title"><h3>Characters</h3></div>
-			<div class="moving-carrousel">
+			<div class="section-title"><h3>Story Characters</h3></div>
+				<div class="moving-carrousel-wrapper">
+					<div class="moving-carrousel">
 {% for character in comic.characters %}
-				<div>
-					<div class="character-name">
-						<p>{{ character.name }}</p>
-					</div>
-					<div class="character-description">
-						<p>{{ character.description }}</p>
-					</div>
-					<div class="character-image">
-						<img src="{{ character.thumbnail }}" />
+						<div class="character-item character-id-{{ character.id }}{{ (character.id == favoriteCharacterId) ? ' favorite-character' : '' }}">
+							<div class="character-name">{{ character.name }}</div>
+							<div class="character-image">
+								<img src="{{ character.thumbnail }}" title="{{ character.description }}" />
+							</div>
+						</div>
+{% endfor %}
 					</div>
 				</div>
-{% endfor %}
 			</div>
 		</section>
 	</main>
 	<footer>
 		<div class="website-message centered">Website and page creation done by Guilherme Rossato</div>
+		<div class="images-message centered">Images, characters, stories created by Marvel</div>
 		<div class="marvel-message centered"><a href="http://marvel.com">{{ attributionText }}</a></div>
 	</footer>
-	<script>
-		const dynamicImages = [];
-
-		document.addEventListener("DOMContentLoaded", function() {
-			const images = document.querySelectorAll('img[src]');
-			for (const index in images) {
-				const image = images[index];
-				if (!(image instanceof HTMLImageElement)) {
-					continue;
-				}
-				if (!image.getAttribute("data-mobile-src") && !image.getAttribute("data-desktop-src")) {
-					continue;
-				}
-				dynamicImages.push(image);
-				updateImage(image);
-			}
-		});
-
-		function updateImage(image) {
-			const attributeName = (window.innerWidth < 600) ? "data-mobile-src" : "data-desktop-src";
-			const attributeValue = image.getAttribute(attributeName);
-			if (!attributeValue) {
-				return;
-			}
-			if (image.getAttribute("src" === attributeValue)) {
-				return;
-			}
-			image.setAttribute("src", attributeValue);
-		}
-
-		window.addEventListener("resize", function() {
-			dynamicImages.forEach(updateImage);
-		});
-
-	</script>
+	<link rel="stylesheet" type="text/css" href="mobile.css" />
+	<script type="text/javascript" src="moving-carrousel.js"></script>
+	<script type="text/javascript" src="dynamic-images.js"></script>
 </body>
